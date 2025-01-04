@@ -89,13 +89,17 @@
                                             <td th:text="${user.email}"></td>
                                             <td th:text="${user.getAllUserRoles()}"></td>
                                             <td>
-                                                <button class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#editUserModal">Edit
+                                                <button class="btn btn-primary"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editUserModal"
+                                                        th:data-id="${user.id}">Edit
                                                 </button>
                                             </td>
                                             <td>
-                                                <button class="btn btn-danger" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteUserModal">Delete
+                                                <button class="btn btn-danger"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#deleteUserModal"
+                                                        th:data-id="${user.id}">Delete
                                                 </button>
                                             </td>
                                         </tr>
@@ -130,6 +134,11 @@
                                         <input type="email" id="email" class="form-control" name="email" required>
                                     </div>
                                     <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" id="password" class="form-control" name="password"
+                                               required>
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="role" class="form-label">Role</label>
                                         <select id="role" class="form-select" name="role" required>
                                             <option value="1">ADMIN</option>
@@ -145,7 +154,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
