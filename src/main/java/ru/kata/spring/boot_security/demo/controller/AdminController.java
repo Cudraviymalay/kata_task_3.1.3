@@ -8,6 +8,7 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
 import java.util.Set;
 
 @Controller
@@ -23,8 +24,9 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String getUsers(Model model) {
+    public String getUsers(Model model, Principal principal) {
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("user", userService.oneUser(principal));
         return "users";
     }
 
@@ -32,12 +34,6 @@ public class AdminController {
     public String newUser(Model model) {
         model.addAttribute("user", new User());
         return "new";
-    }
-
-    @PostMapping("/edit")
-    public String edit(@RequestParam(value = "id") long id, Model model) {
-        model.addAttribute("user", userService.getOne(id));
-        return "edit";
     }
 
     @PostMapping("/new/")
@@ -58,5 +54,11 @@ public class AdminController {
     public String delete(@RequestParam("id") long id) {
         userService.delete(id);
         return "redirect:/admin/";
+    }
+
+    @GetMapping("/user")
+    public String user(Model model, Principal principal) {
+        model.addAttribute("user", userService.oneUser(principal));
+        return "userAdminInfo";
     }
 }
