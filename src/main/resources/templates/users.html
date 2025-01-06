@@ -105,7 +105,12 @@
                                                 <button class="btn btn-danger"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteUserModal"
-                                                        th:data-id="${user.id}">Delete
+                                                        th:data-id="${user.id}"
+                                                        th:data-username="${user.username}"
+                                                        th:data-surname="${user.surname}"
+                                                        th:data-age="${user.age}"
+                                                        th:data-email="${user.email}"
+                                                        th:data-roles="${user.getAllUserRoles()}">Delete
                                                 </button>
                                             </td>
                                         </tr>
@@ -248,10 +253,31 @@
                 <h5 class="modal-title" id="deleteUserModalLabel">Delete User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="deleteUserForm" th:method="POST" th:action="@{/admin/delete}">
+            <form method="POST" action="" id="deleteUserForm">
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this user?</p>
-                    <input type="hidden" id="deleteUserId" name="id">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">First name</label>
+                        <input type="text" id="name" class="form-control" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Last name</label>
+                        <input type="text" id="lastName" class="form-control" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="age" class="form-label">Age</label>
+                        <input type="number" id="age" class="form-control" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" class="form-control" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="roles" class="form-label">Role</label>
+                        <select name="role" class="form-select" multiple id="roles" style="height: 100px;" disabled>
+                            <option value="1">ADMIN</option>
+                            <option value="2">USER</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -263,31 +289,28 @@
 </div>
 
 <script>
-    // Получаем элемент модального окна удаления
     const deleteUserModal = document.getElementById('deleteUserModal');
 
-    // Обработчик события открытия модального окна
     deleteUserModal.addEventListener('show.bs.modal', function (event) {
-        // Получаем кнопку, которая вызвала модальное окно
-        const button = event.relatedTarget;
+        const button = event.relatedTarget; // Кнопка, открывшая модальное окно
 
-        // Извлекаем ID пользователя из атрибута data-id кнопки
+        // Извлекаем данные пользователя из атрибутов кнопки
         const userId = button.getAttribute('data-id');
+        const username = button.getAttribute('data-username');
+        const surname = button.getAttribute('data-surname');
+        const age = button.getAttribute('data-age');
+        const email = button.getAttribute('data-email');
 
-        // Находим скрытое поле формы и устанавливаем его значение
-        const deleteInput = deleteUserModal.querySelector('input#deleteUserId');
-        deleteInput.value = userId;
+        // Заполняем поля модального окна
+        deleteUserModal.querySelector('#name').value = username;
+        deleteUserModal.querySelector('#lastName').value = surname;
+        deleteUserModal.querySelector('#age').value = age;
+        deleteUserModal.querySelector('#email').value = email;
+
+        // Устанавливаем action для формы
+        const form = deleteUserModal.querySelector('form');
+        form.action = `/admin/delete?id=${userId}`;
     });
-
-    // Опционально: можно добавить обработку отправки формы для наглядности
-    const deleteUserForm = document.getElementById('deleteUserForm');
-    deleteUserForm.addEventListener('submit', function (event) {
-        const userId = deleteUserForm.querySelector('input#deleteUserId').value;
-        console.log(`Deleting user with ID: ${userId}`);
-        // Если нужно, можно отменить отправку формы и отправить запрос через fetch/AJAX
-        // event.preventDefault();
-    });
-
 </script>
 
 </div>
