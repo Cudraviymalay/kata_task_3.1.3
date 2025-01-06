@@ -92,8 +92,14 @@
                                                 <button class="btn btn-primary"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#editUserModal"
-                                                        th:data-id="${user.id}">Edit
+                                                        th:data-id="${user.id}"
+                                                        th:data-username="${user.username}"
+                                                        th:data-surname="${user.surname}"
+                                                        th:data-age="${user.age}"
+                                                        th:data-email="${user.email}"
+                                                        th:data-roles="${user.getAllUserRoles()}">Edit
                                                 </button>
+
                                             </td>
                                             <td>
                                                 <button class="btn btn-danger"
@@ -208,6 +214,32 @@
     </div>
 </div>
 
+<script>
+    const editUserModal = document.getElementById('editUserModal');
+
+    editUserModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Кнопка, которая открыла модальное окно
+
+        // Извлекаем данные из атрибутов кнопки
+        const userId = button.getAttribute('data-id');
+        const username = button.getAttribute('data-username');
+        const surname = button.getAttribute('data-surname');
+        const age = button.getAttribute('data-age');
+        const email = button.getAttribute('data-email');
+
+        // Заполняем форму модального окна
+        editUserModal.querySelector('input#name').value = username;
+        editUserModal.querySelector('input#lastName').value = surname;
+        editUserModal.querySelector('input#age').value = age;
+        editUserModal.querySelector('input#email').value = email;
+
+        // Устанавливаем action для формы
+        const form = editUserModal.querySelector('form');
+        form.action = `/admin/update?id=${userId}`;
+    });
+
+</script>
+
 <!-- Delete User Modal -->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -251,6 +283,33 @@
         </div>
     </div>
 </div>
+
+<script>
+    const deleteUserModal = document.getElementById('deleteUserModal');
+
+    deleteUserModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Кнопка, которая открыла модальное окно
+
+        // Извлекаем ID пользователя
+        const userId = button.getAttribute('data-id');
+
+        // Устанавливаем ссылку для удаления
+        const deleteButton = deleteUserModal.querySelector('button#confirmDelete');
+        deleteButton.setAttribute('data-id', userId);
+    });
+
+</script>
+
+<script>
+    deleteUserModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const userId = button.getAttribute('data-id');
+
+        const deleteInput = deleteUserModal.querySelector('input#deleteUserId');
+        deleteInput.value = userId;
+    });
+
+</script>
 
 </div>
 </body>
