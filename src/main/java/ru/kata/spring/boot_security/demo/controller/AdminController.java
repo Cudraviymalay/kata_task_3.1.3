@@ -30,13 +30,14 @@ public class AdminController {
         return "users";
     }
 
-    @GetMapping("/new/")
-    public String newUser(Model model) {
+    @GetMapping("/new")
+    public String newUser(Model model, Principal principal) {
         model.addAttribute("user", new User());
+        model.addAttribute("user", userService.oneUser(principal));
         return "new";
     }
 
-    @PostMapping("/new/")
+    @PostMapping("/new")
     public String addUser(@ModelAttribute User user, @RequestParam(value = "role") Set<Role> roles) {
         userService.save(userService.createUser(user, roles));
         return "redirect:/admin/";
